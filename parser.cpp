@@ -67,7 +67,7 @@ bool Lexer::createLexer(string newWord){
   }else if (currentChar=='-'){
     addNewLexerValue("Negative"," ");
   }else if (currentChar=='*'){
-    addNewLexerValue("Multiply"," ");
+    addNewLexerValue("Negative"," ");
   }else if (currentChar=='/'){
     addNewLexerValue("Divide"," ");
   }else if (currentChar=='('){
@@ -82,6 +82,102 @@ bool Lexer::createLexer(string newWord){
 
 }
 
+class Node{
+  public:
+  Node(Node aa, Node bb, string oper){
+    string theOperator = oper;
+    Node a = aa;
+    Node b = bb;
+  }
+  Node(Node aa, string oper){
+    string theOperator = oper;
+    Node a = aa;
+  }
+  Node(string num){
+    string number = num;
+  }
+
+};
+
+class Parser{
+  public:
+  vector <vector<string> > lexer;
+  string currentType;
+  string currentVal;
+  int currentIndx;
+
+  Parser(vector <vector<string> > lex){
+    lexer = lex;
+    currentIndx = 0;
+  }
+  void next(){
+    currentType = lexer[currentIndx][0];
+    currentVal = lexer[currentIndx][1];
+    currentIndx = currentIndx + 1;
+  }
+  Node createTree(){
+    return subtract_add();
+  }
+  Node subtract_add(){
+    Node result = multiply_divide();
+
+    while (currentType=="Plus" | currentType=="Negative"){
+      if (currentType=="Plus"){
+        result = Node(result, number(),"Add");
+      }
+      if (currentType=="Negative"){
+        result = Node(result, number(),"Subtract");
+      }
+      next();
+    }
+    return result;
+  }
+  Node multiply_divide(){
+    Node result = number();
+
+    while ((currentType=="Multiply" | currentType=="Divide")){
+      if (currentType=="Multiply"){
+        result = Node(result, number(),"Multiply");
+      }
+      if (currentType=="Divide"){
+        result = Node(result, number(),"Divide");
+      }
+      next();
+    }
+    return result;
+  }
+  Node number(){
+    if (currentType=="LParent"){
+      next();
+      Node result = subtract_add();
+      if (currentType != "RParen"){
+        cout << "ERROR";
+      }
+      next();
+      return result;
+    }
+    if (currentType=="Number"){
+      Node result(currentVal);
+      next();
+      return result;
+    }
+    if (currentType=="Plus"){
+      Node result = number();
+      next();
+      return Node(result,"+");
+    }
+    if (currentType=="Negative"){
+      Node result = number();
+      next();
+      return Node(result,"-");
+    }
+
+  }
+
+};
+
 int main(){
-  Lexer obj("7+8");
+  cout << "hey";
+  
+
 }
