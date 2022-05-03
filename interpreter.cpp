@@ -51,7 +51,7 @@ int main(){
   cin >> expression;
   cout << "Solving " << expression << "......" << endl;
   Lexer lexer(expression);
-  vector <vector<string>> lexerTable = lexer.table;
+  vector <vector<string> > lexerTable = lexer.table;
   Parser parser(lexerTable);
   Node parserNode = parser.getFinal();
   Interpreter interpreter(parserNode);

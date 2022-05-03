@@ -18,5 +18,5 @@ lex:
 	g++ -std=c++11 -c lexer.cpp -o files/lexer
 
 
-run: int 
+run: int
 	g++ files/parser files/lexer files/interpreter
